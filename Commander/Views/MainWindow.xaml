@@ -3,9 +3,20 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Commander"
+        xmlns:loca="clr-namespace:Commander"
+        xmlns:viewModels="clr-namespace:Commander.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="700">
+        Title=".NCommander" Height="600" Width="700">
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <DataTemplate DataType="viewModels:FileViewModel">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="{Binding FileName}" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -16,36 +27,63 @@
                 <MenuItem Header="_Exit" />
             </MenuItem>
         </Menu>
-        <Grid DockPanel.Dock="Top">
+        <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ListView>
+            <StackPanel>
+                <TextBox Text="{Binding LeftListViewModel.CurrentPath, Mode=TwoWay}" />
+                <Button>Load path content</Button>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <TextBox Text="{Binding RightListViewModel.CurrentPath, Mode=TwoWay}" />
+                <Button>Load path content</Button>
+            </StackPanel>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ListView ItemsSource="{Binding Path=LeftListViewModel.Files}">
                 <ListView.View>
-                    <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Authors">
-                        <GridViewColumn Header="Name" Width="120" />
-                        <GridViewColumn Header="Ext" Width="50" />
-                        <GridViewColumn Header="Size" Width="80" />
-                        <GridViewColumn Header="Date" Width="80" />
-                        <GridViewColumn Header="Attr" Width="50" />
+                    <GridView AllowsColumnReorder="true"
+                              ColumnHeaderToolTip="Authors">
+                        <GridViewColumn Header="Name"
+                                        Width="120" />
+                        <GridViewColumn Header="Ext"
+                                        Width="50" />
+                        <GridViewColumn Header="Size"
+                                        Width="80" />
+                        <GridViewColumn Header="Date"
+                                        Width="80" />
+                        <GridViewColumn Header="Attr"
+                                        Width="50" />
                     </GridView>
                 </ListView.View>
             </ListView>
-            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+            <GridSplitter Grid.Column="1"
+                          Width="5"
+                          HorizontalAlignment="Stretch" />
             <ListView Grid.Column="2">
                 <ListView.View>
-                    <GridView AllowsColumnReorder="false" ColumnHeaderToolTip="Authors">
-                        <GridViewColumn Header="Name" Width="120" />
-                        <GridViewColumn Header="Ext" Width="50" />
-                        <GridViewColumn Header="Size" Width="80" />
-                        <GridViewColumn Header="Date" Width="80" />
-                        <GridViewColumn Header="Attr" Width="50" />
+                    <GridView AllowsColumnReorder="false"
+                              ColumnHeaderToolTip="Authors">
+                        <GridViewColumn Header="Name"
+                                        Width="120" />
+                        <GridViewColumn Header="Ext"
+                                        Width="50" />
+                        <GridViewColumn Header="Size"
+                                        Width="80" />
+                        <GridViewColumn Header="Date"
+                                        Width="80" />
+                        <GridViewColumn Header="Attr"
+                                        Width="50" />
                     </GridView>
                 </ListView.View>
             </ListView>
         </Grid>
-
     </DockPanel>
 </Window>
