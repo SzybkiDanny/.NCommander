@@ -71,6 +71,8 @@
       <DependentUpon>FileList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\FileList\ViewModels\FileListViewModel.cs" />
+    <Compile Include="Controls\FileList\ViewModels\FileSystemItemViewModel.cs" />
+    <Compile Include="Controls\FileList\ViewModels\DirectoryViewModel.cs" />
     <Compile Include="Controls\FileList\ViewModels\FileViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">

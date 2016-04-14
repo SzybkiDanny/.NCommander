@@ -8,22 +8,22 @@ namespace Commander.Controls.FileList.ViewModels
 {
     public class FileListViewModel : BindableBase
     {
-        public string CurrentPath { get; set; } = @"D:\Music";
+        public string CurrentPath { get; set; }
         public FileListViewModel()
         {
-            LoadPathCommand = new DelegateCommand<string>(GetPathFiles, CanSubmit);
+            LoadPathCommand = new DelegateCommand(GetPathFiles, CanSubmit);
         }
 
-        public ObservableCollection<FileViewModel> Files { get; set; } =
-            new ObservableCollection<FileViewModel> {new FileViewModel(), new FileViewModel()};
+        public ObservableCollection<FileSystemItemViewModel> Files { get; set; } =
+            new ObservableCollection<FileSystemItemViewModel>();
 
         public ICommand LoadPathCommand { get; private set; }
 
-        private void GetPathFiles(string path)
+        private void GetPathFiles()
         {
-            Files.Add(new FileViewModel());
+            Files.Add(FileSystemItemViewModel.Create(CurrentPath));
         }
 
-        private static bool CanSubmit(string path) => true;
+        private static bool CanSubmit() => true;
     }
 }

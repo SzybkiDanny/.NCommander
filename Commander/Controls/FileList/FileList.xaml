@@ -10,32 +10,30 @@
     <UserControl.DataContext>
         <viewModels:FileListViewModel />
     </UserControl.DataContext>
-    <UserControl.Resources>
-        <DataTemplate DataType="viewModels:FileViewModel">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="{Binding FileName}" />
-            </StackPanel>
-        </DataTemplate>
-    </UserControl.Resources>
     <DockPanel >
         <StackPanel DockPanel.Dock="Bottom">
             <TextBox Text="{Binding CurrentPath, Mode=TwoWay}" />
-            <Button>Load path</Button>
+            <Button Command="{Binding Path=LoadPathCommand}">Load path</Button>
         </StackPanel>
         <ListView ItemsSource="{Binding Files}">
             <ListView.View>
                 <GridView AllowsColumnReorder="true"
                           ColumnHeaderToolTip="Authors">
                     <GridViewColumn Header="Name"
-                                    Width="120" />
+                                    Width="120"
+                                    DisplayMemberBinding="{Binding Name}"/>
                     <GridViewColumn Header="Ext"
-                                    Width="50" />
+                                    Width="50"
+                                    DisplayMemberBinding="{Binding Extension}"/>
                     <GridViewColumn Header="Size"
-                                    Width="80" />
-                    <GridViewColumn Header="Date"
-                                    Width="80" />
+                                    Width="80"
+                                    DisplayMemberBinding="{Binding Size}"/>
+                    <GridViewColumn Header="ModificationDate"
+                                    Width="80"
+                                    DisplayMemberBinding="{Binding ModificationDate}"/>
                     <GridViewColumn Header="Attr"
-                                    Width="50" />
+                                    Width="50"
+                                    DisplayMemberBinding="{Binding Attributes}"/>
                 </GridView>
             </ListView.View>
         </ListView>
