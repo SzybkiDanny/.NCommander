@@ -1,6 +1,6 @@
 ﻿using Microsoft.Practices.Prism.Mvvm;
 
-namespace Commander.ViewModels
+namespace Commander.Controls.FileList.ViewModels
 {
     public class FileViewModel : BindableBase
     {

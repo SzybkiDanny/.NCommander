@@ -1,9 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Commander.ViewModels;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 
-namespace Commander.ViewModels
+namespace Commander.Controls.FileList.ViewModels
 {
     public class FileListViewModel : BindableBase
     {
