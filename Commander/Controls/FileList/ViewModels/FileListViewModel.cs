@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -28,7 +27,10 @@ namespace Commander.Controls.FileList.ViewModels
             Task.Run(() =>
             {
                 UiInvoke(() => Files.Clear());
-                foreach (var directory in Directory.GetDirectories(CurrentPath).Select(FileSystemItemViewModel.Create))
+            var newDirectory = new DirectoryInfo(CurrentPath);
+            if (newDirectory?.Parent != null)
+                UiInvoke(() => Files.Add(new DirectoryViewModel(newDirectory.Parent?.FullName) { DisplayName = ".." }));
+            foreach (var directory in Directory.GetDirectories(CurrentPath).Select(FileSystemItemViewModel.Create))
                     UiInvoke(() => Files.Add(directory));
                 foreach (var file in Directory.GetFiles(CurrentPath).Select(FileSystemItemViewModel.Create))
                     UiInvoke(() => Files.Add(file));

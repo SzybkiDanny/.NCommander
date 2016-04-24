@@ -18,22 +18,22 @@
             <!--Unfortunately the templates cannot be reused as it's not possible to set both DisplayMemberBinding and CellTempate on GridViewColumn.-->
             <DataTemplate x:Key="NameTemplate"
                           DataType="viewModels:FileSystemItemViewModel">
-                <TextBlock Text="{Binding Name}">
+                <TextBlock Text="{Binding DisplayName}">
                     <TextBlock.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick"
                                       CommandParameter="{Binding FileSystemItem}"
-                                      Command="{Binding ElementName=UserControl, Path=FileSelected}" />
+                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
                 </TextBlock>
             </DataTemplate>
 
             <DataTemplate x:Key="ExtensionTemplate"
-                          DataType="viewModels:FileSystemItemViewModel">
+                          DataType="viewModels:FileViewModel">
                 <TextBlock Text="{Binding Extension}">
                     <TextBlock.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick"
                                       CommandParameter="{Binding FileSystemItem}"
-                                      Command="{Binding ElementName=UserControl, Path=FileSelected}" />
+                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
                 </TextBlock>
             </DataTemplate>
@@ -44,7 +44,7 @@
                     <TextBlock.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick"
                                       CommandParameter="{Binding FileSystemItem}"
-                                      Command="{Binding ElementName=UserControl, Path=FileSelected}" />
+                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
                 </TextBlock>
             </DataTemplate>
@@ -55,7 +55,7 @@
                     <TextBlock.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick"
                                       CommandParameter="{Binding FileSystemItem}"
-                                      Command="{Binding ElementName=UserControl, Path=FileSelected}" />
+                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
                 </TextBlock>
             </DataTemplate>
@@ -66,7 +66,7 @@
                     <TextBlock.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick"
                                       CommandParameter="{Binding FileSystemItem}"
-                                      Command="{Binding ElementName=UserControl, Path=FileSelected}" />
+                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
                 </TextBlock>
             </DataTemplate>

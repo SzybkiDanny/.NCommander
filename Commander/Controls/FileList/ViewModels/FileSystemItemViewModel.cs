@@ -6,10 +6,17 @@ namespace Commander.Controls.FileList.ViewModels
 {
     public abstract class FileSystemItemViewModel : BindableBase
     {
-        public string Name => FileSystemItem.Name;
+        private string _displayName;
+
+        public string DisplayName
+        {
+            get { return _displayName ?? FileSystemItem.Name; }
+            set { _displayName = value; }
+        }
         public string Extension => FileSystemItem.Extension;
         public DateTime ModificationDate => FileSystemItem.LastWriteTime;
         public string Attributes => FileSystemItem.Attributes.ToString();
+
         public abstract FileSystemInfo FileSystemItem { get; }
 
         public static FileSystemItemViewModel Create(string path)
