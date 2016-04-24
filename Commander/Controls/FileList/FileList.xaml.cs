@@ -1,12 +1,23 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Input;
 
 namespace Commander.Controls.FileList
 {
-    /// <summary>
-    /// Interaction logic for FileList.xaml
-    /// </summary>
-    public partial class FileList : UserControl
+    public partial class FileList
     {
+        public static readonly DependencyProperty FileSelectedProperty =
+            DependencyProperty.Register(
+                "FileSelected",
+                typeof (ICommand),
+                typeof (FileList),
+                new UIPropertyMetadata(null));
+
+        public ICommand FileSelected
+        {
+            get { return (ICommand)GetValue(FileSelectedProperty); }
+            set { SetValue(FileSelectedProperty, value); }
+        }
+
         public FileList()
         {
             InitializeComponent();

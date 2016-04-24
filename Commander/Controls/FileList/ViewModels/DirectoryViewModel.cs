@@ -1,21 +1,14 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace Commander.Controls.FileList.ViewModels
 {
     public class DirectoryViewModel : FileSystemItemViewModel
     {
-        public override string Name => _directory.Name;
-        public override string Extension => _directory.Extension;
-        public override long? Size => null;
-        public override DateTime ModificationDate => _directory.LastWriteTime;
-        public override string Attributes => _directory.Attributes.ToString();
+        public override FileSystemInfo FileSystemItem { get; }
 
-        private DirectoryInfo _directory;
-
-        public DirectoryViewModel(string path) : base(path)
+        public DirectoryViewModel(string path)
         {
-            _directory = new DirectoryInfo(path);
+            FileSystemItem = new DirectoryInfo(path);
         }
     }
 }

@@ -1,19 +1,81 @@
 ﻿<UserControl x:Class="Commander.Controls.FileList.FileList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Commander.Controls"
              xmlns:viewModels="clr-namespace:Commander.Controls.FileList.ViewModels"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             xmlns:fileList="clr-namespace:Commander.Controls.FileList"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             x:Name="UserControl">
     <UserControl.DataContext>
         <viewModels:FileListViewModel />
     </UserControl.DataContext>
-    <DockPanel >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <!--Unfortunately the templates cannot be reused as it's not possible to set both DisplayMemberBinding and CellTempate on GridViewColumn.-->
+            <DataTemplate x:Key="NameTemplate"
+                          DataType="viewModels:FileSystemItemViewModel">
+                <TextBlock Text="{Binding Name}">
+                    <TextBlock.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick"
+                                      CommandParameter="{Binding FileSystemItem}"
+                                      Command="{Binding ElementName=UserControl, Path=FileSelected}" />
+                    </TextBlock.InputBindings>
+                </TextBlock>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ExtensionTemplate"
+                          DataType="viewModels:FileSystemItemViewModel">
+                <TextBlock Text="{Binding Extension}">
+                    <TextBlock.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick"
+                                      CommandParameter="{Binding FileSystemItem}"
+                                      Command="{Binding ElementName=UserControl, Path=FileSelected}" />
+                    </TextBlock.InputBindings>
+                </TextBlock>
+            </DataTemplate>
+
+            <DataTemplate x:Key="SizeTemplate"
+                          DataType="viewModels:FileViewModel">
+                <TextBlock Text="{Binding Size}">
+                    <TextBlock.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick"
+                                      CommandParameter="{Binding FileSystemItem}"
+                                      Command="{Binding ElementName=UserControl, Path=FileSelected}" />
+                    </TextBlock.InputBindings>
+                </TextBlock>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ModificationDateTemplate"
+                          DataType="viewModels:FileSystemItemViewModel">
+                <TextBlock Text="{Binding ModificationDate}">
+                    <TextBlock.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick"
+                                      CommandParameter="{Binding FileSystemItem}"
+                                      Command="{Binding ElementName=UserControl, Path=FileSelected}" />
+                    </TextBlock.InputBindings>
+                </TextBlock>
+            </DataTemplate>
+
+            <DataTemplate x:Key="AttributesTemplate"
+                          DataType="viewModels:FileSystemItemViewModel">
+                <TextBlock Text="{Binding Attributes}">
+                    <TextBlock.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick"
+                                      CommandParameter="{Binding FileSystemItem}"
+                                      Command="{Binding ElementName=UserControl, Path=FileSelected}" />
+                    </TextBlock.InputBindings>
+                </TextBlock>
+            </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <DockPanel>
         <StackPanel DockPanel.Dock="Bottom">
             <TextBox Text="{Binding CurrentPath, Mode=TwoWay}" />
-            <Button Command="{Binding Path=LoadPathCommand}">Load path</Button>
+            <Button Command="{Binding Path=LoadPathCommand}">Load</Button>
         </StackPanel>
         <ListView ItemsSource="{Binding Files}">
             <ListView.View>
@@ -21,22 +83,21 @@
                           ColumnHeaderToolTip="Authors">
                     <GridViewColumn Header="Name"
                                     Width="120"
-                                    DisplayMemberBinding="{Binding Name}"/>
+                                    CellTemplate="{StaticResource NameTemplate}" />
                     <GridViewColumn Header="Ext"
                                     Width="50"
-                                    DisplayMemberBinding="{Binding Extension}"/>
+                                    CellTemplate="{StaticResource ExtensionTemplate}" />
                     <GridViewColumn Header="Size"
                                     Width="80"
-                                    DisplayMemberBinding="{Binding Size}"/>
+                                    CellTemplate="{StaticResource SizeTemplate}" />
                     <GridViewColumn Header="ModificationDate"
                                     Width="80"
-                                    DisplayMemberBinding="{Binding ModificationDate}"/>
+                                    CellTemplate="{StaticResource ModificationDateTemplate}" />
                     <GridViewColumn Header="Attr"
                                     Width="50"
-                                    DisplayMemberBinding="{Binding Attributes}"/>
+                                    CellTemplate="{StaticResource AttributesTemplate}" />
                 </GridView>
             </ListView.View>
         </ListView>
     </DockPanel>
 </UserControl>
-
