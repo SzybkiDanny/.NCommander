@@ -27,15 +27,13 @@
                 <ColumnDefinition Width="2" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <fileList:FileList>
-                
-            </fileList:FileList>
+            <fileList:FileList
+                FileSelected="{Binding RelativeSource={RelativeSource 
+    AncestorType=Window}, Path=DataContext.FileClicked}" />
             <GridSplitter Grid.Column="1"
                           Width="5"
                           HorizontalAlignment="Stretch" />
-            <fileList:FileList Grid.Column="2">
-
-            </fileList:FileList>
+            <fileList:FileList Grid.Column="2" />
         </Grid>
     </DockPanel>
 </Window>
