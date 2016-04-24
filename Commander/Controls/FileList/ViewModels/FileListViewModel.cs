@@ -1,6 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
@@ -21,11 +25,22 @@ namespace Commander.Controls.FileList.ViewModels
 
         private void GetPathFiles()
         {
-            Files.Clear();
-            foreach (var directory in Directory.GetDirectories(CurrentPath).Select(FileSystemItemViewModel.Create))
-                Files.Add(directory);
-            foreach (var file in Directory.GetFiles(CurrentPath).Select(FileSystemItemViewModel.Create))
-                Files.Add(file);
+            Task.Run(() =>
+            {
+                UiInvoke(() => Files.Clear());
+                foreach (var directory in Directory.GetDirectories(CurrentPath).Select(FileSystemItemViewModel.Create))
+                    UiInvoke(() => Files.Add(directory));
+                foreach (var file in Directory.GetFiles(CurrentPath).Select(FileSystemItemViewModel.Create))
+                    UiInvoke(() => Files.Add(file));
+            });
+        }
+
+        private static void UiInvoke(Action action)
+        {
+            if (!Application.Current.Dispatcher.CheckAccess())
+                Application.Current.Dispatcher.Invoke(action);
+            else
+                action();
         }
     }
 }
