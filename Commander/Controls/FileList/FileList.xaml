@@ -16,6 +16,18 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <!--Unfortunately the templates cannot be reused as it's not possible to set both DisplayMemberBinding and CellTempate on GridViewColumn.-->
+            <DataTemplate x:Key="IconTemplate"
+                          DataType="viewModels:FileViewModel">
+                <Image Source="{Binding Ico}"
+                       Height="16px">
+                    <Image.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick"
+                                      CommandParameter="{Binding FileSystemItem}"
+                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
+                    </Image.InputBindings>
+                </Image>
+            </DataTemplate>
+            
             <DataTemplate x:Key="NameTemplate"
                           DataType="viewModels:FileSystemItemViewModel">
                 <TextBlock Text="{Binding DisplayName}">
@@ -81,6 +93,9 @@
             <ListView.View>
                 <GridView AllowsColumnReorder="true"
                           ColumnHeaderToolTip="Authors">
+                    <GridViewColumn Header=""
+                                    Width="32"
+                                    CellTemplate="{StaticResource IconTemplate}" />
                     <GridViewColumn Header="Name"
                                     Width="120"
                                     CellTemplate="{StaticResource NameTemplate}" />

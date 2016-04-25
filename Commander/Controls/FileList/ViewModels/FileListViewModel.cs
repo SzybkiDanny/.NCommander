@@ -12,25 +12,27 @@ namespace Commander.Controls.FileList.ViewModels
 {
     public class FileListViewModel : BindableBase
     {
-        public string CurrentPath { get; set; }
-        public ObservableCollection<FileSystemItemViewModel> Files { get; set; } =
-            new ObservableCollection<FileSystemItemViewModel>();
-        public ICommand LoadPathCommand { get; private set; }
-
         public FileListViewModel()
         {
             LoadPathCommand = new DelegateCommand(GetPathFiles);
         }
+
+        public string CurrentPath { get; set; }
+
+        public ObservableCollection<FileSystemItemViewModel> Files { get; set; } =
+            new ObservableCollection<FileSystemItemViewModel>();
+
+        public ICommand LoadPathCommand { get; private set; }
 
         private void GetPathFiles()
         {
             Task.Run(() =>
             {
                 UiInvoke(() => Files.Clear());
-            var newDirectory = new DirectoryInfo(CurrentPath);
-            if (newDirectory?.Parent != null)
-                UiInvoke(() => Files.Add(new DirectoryViewModel(newDirectory.Parent?.FullName) { DisplayName = ".." }));
-            foreach (var directory in Directory.GetDirectories(CurrentPath).Select(FileSystemItemViewModel.Create))
+                var newDirectory = new DirectoryInfo(CurrentPath);
+                if (newDirectory?.Parent != null)
+                    UiInvoke(() => Files.Add(new DirectoryViewModel(newDirectory.Parent?.FullName) {DisplayName = ".."}));
+                foreach (var directory in Directory.GetDirectories(CurrentPath).Select(FileSystemItemViewModel.Create))
                     UiInvoke(() => Files.Add(directory));
                 foreach (var file in Directory.GetFiles(CurrentPath).Select(FileSystemItemViewModel.Create))
                     UiInvoke(() => Files.Add(file));
