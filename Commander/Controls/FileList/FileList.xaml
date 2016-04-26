@@ -15,6 +15,10 @@
     </UserControl.DataContext>
     <UserControl.Resources>
         <ResourceDictionary>
+            <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Stretch" />
+            </Style>
             <!--Unfortunately the templates cannot be reused as it's not possible to set both DisplayMemberBinding and CellTempate on GridViewColumn.-->
             <DataTemplate x:Key="IconTemplate"
                           DataType="viewModels:FileViewModel">
@@ -27,7 +31,7 @@
                     </Image.InputBindings>
                 </Image>
             </DataTemplate>
-            
+
             <DataTemplate x:Key="NameTemplate"
                           DataType="viewModels:FileSystemItemViewModel">
                 <TextBlock Text="{Binding DisplayName}">
@@ -86,13 +90,19 @@
     </UserControl.Resources>
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom">
-            <TextBox Text="{Binding CurrentPath, Mode=TwoWay}" />
-            <Button Command="{Binding Path=LoadPathCommand}">Load</Button>
+            <TextBox Name="CurrentPathTextBox" Text="{Binding CurrentPath, Mode=TwoWay}" />
+            <Button Command="{Binding Path=LoadPathCommand}"
+                    CommandParameter="{Binding ElementName=CurrentPathTextBox, Path=Text}">
+                Load
+            </Button>
         </StackPanel>
-        <ListView ItemsSource="{Binding Files}">
+        <ListView ItemsSource="{Binding Files}"
+                  AllowDrop="True"
+                  MouseMove="ListView_MouseMove"
+                  DragEnter="ListView_DragEnter"
+                  Drop="ListView_Drop">
             <ListView.View>
-                <GridView AllowsColumnReorder="true"
-                          ColumnHeaderToolTip="Authors">
+                <GridView ColumnHeaderToolTip="Authors">
                     <GridViewColumn Header=""
                                     Width="32"
                                     CellTemplate="{StaticResource IconTemplate}" />

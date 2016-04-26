@@ -1,5 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Commander.Controls.FileList.ViewModels;
 using Microsoft.Practices.Prism.Commands;
@@ -45,9 +49,32 @@ namespace Commander.Controls.FileList
             FileSelected?.Execute(fileSystemInfo);
             if (!File.GetAttributes(fileSystemInfo.FullName).HasFlag(FileAttributes.Directory)) return;
 
-            var viewModel = (DataContext as FileListViewModel);
-            viewModel.CurrentPath = fileSystemInfo.FullName;
-            viewModel.LoadPathCommand.Execute(null);
+            (DataContext as FileListViewModel)?.LoadPathCommand.Execute(fileSystemInfo.FullName);
+        }
+
+        private void ListView_MouseMove(object sender, MouseEventArgs e)
+        {
+            var dragSource = sender as ListView;
+            if (dragSource != null && e.LeftButton == MouseButtonState.Pressed)
+            {
+                DragDrop.DoDragDrop(dragSource,
+                                     dragSource.SelectedItems,
+                                     DragDropEffects.Move);
+            }
+        }
+
+        private void ListView_DragEnter(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(e.Data.GetFormats().FirstOrDefault()) || sender == e.Source)
+                e.Effects = DragDropEffects.None;
+        }
+
+        private void ListView_Drop(object sender, DragEventArgs e)
+        {
+            //dynamic droppedFiles = e.Data.GetData(e.Data.GetFormats().FirstOrDefault());
+            //if (droppedFiles != null)
+            //    File.Move(droppedFiles.FileSystemItem.FullName, CurrentPathTextBox.Text + "/" + droppedFiles[0].FileSystemItem.Name);
+            
         }
     }
 }
