@@ -12,30 +12,43 @@ namespace Commander.Controls.FileList.ViewModels
 {
     public class FileListViewModel : BindableBase
     {
+        private string _currentPath = @"D:\";
+
+        private ObservableCollection<FileSystemItemViewModel> _files =
+            new ObservableCollection<FileSystemItemViewModel>();
+
         public FileListViewModel()
         {
-            LoadPathCommand = new DelegateCommand(GetPathFiles);
+            LoadPathCommand = new DelegateCommand<string>(GetPathFiles);
         }
 
-        public string CurrentPath { get; set; }
+        public string CurrentPath
+        {
+            get { return _currentPath; }
+            set { SetProperty(ref _currentPath, value); }
+        }
 
-        public ObservableCollection<FileSystemItemViewModel> Files { get; set; } =
-            new ObservableCollection<FileSystemItemViewModel>();
+        public ObservableCollection<FileSystemItemViewModel> Files
+        {
+            get { return _files; }
+            set { SetProperty(ref _files, value); }
+        }
 
         public ICommand LoadPathCommand { get; private set; }
 
-        private void GetPathFiles()
+        private void GetPathFiles(string path)
         {
             Task.Run(() =>
             {
-                UiInvoke(() => Files.Clear());
-                var newDirectory = new DirectoryInfo(CurrentPath);
+                Files =
+                    new ObservableCollection<FileSystemItemViewModel>(
+                        Directory.GetDirectories(path)
+                            .Select(FileSystemItemViewModel.Create)
+                            .Concat(Directory.GetFiles(path).Select(FileSystemItemViewModel.Create)));
+                var newDirectory = new DirectoryInfo(path);
                 if (newDirectory?.Parent != null)
-                    UiInvoke(() => Files.Add(new DirectoryViewModel(newDirectory.Parent?.FullName) {DisplayName = ".."}));
-                foreach (var directory in Directory.GetDirectories(CurrentPath).Select(FileSystemItemViewModel.Create))
-                    UiInvoke(() => Files.Add(directory));
-                foreach (var file in Directory.GetFiles(CurrentPath).Select(FileSystemItemViewModel.Create))
-                    UiInvoke(() => Files.Add(file));
+                    Files.Insert(0, new DirectoryViewModel(newDirectory.Parent?.FullName) { DisplayName = ".." });
+                CurrentPath = path;
             });
         }
 
