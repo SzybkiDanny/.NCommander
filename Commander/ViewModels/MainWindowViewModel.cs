@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Prism.Commands;
@@ -9,14 +10,21 @@ namespace Commander.ViewModels
     {
         public MainWindowViewModel()
         {
-            FileClicked = new DelegateCommand<FileSystemInfo>(ExecuteMethod);
+            FileClick = new DelegateCommand<FileSystemInfo>(FileClicked);
+            ChangeLanguage = new DelegateCommand<string>(LanguageChanged);
         }
 
-        private void ExecuteMethod(FileSystemInfo o)
+        private void LanguageChanged(string language)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void FileClicked(FileSystemInfo o)
         {
             o.ToString();
         }
 
-        public ICommand FileClicked { get; private set; }
+        public ICommand FileClick { get; private set; }
+        public ICommand ChangeLanguage { get; private set; }
     }
 }

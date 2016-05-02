@@ -13,12 +13,9 @@
     </Window.DataContext>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_New" />
-                <MenuItem Header="_Open" />
-                <MenuItem Header="_Save" />
-                <Separator />
-                <MenuItem Header="_Exit" />
+            <MenuItem Header="_Language">
+                <MenuItem Header="_PL" />
+                <MenuItem Header="_EN" />
             </MenuItem>
         </Menu>
         <Grid>
@@ -29,7 +26,7 @@
             </Grid.ColumnDefinitions>
             <fileList:FileList
                 FileSelected="{Binding RelativeSource={RelativeSource 
-    AncestorType=Window}, Path=DataContext.FileClicked}" />
+    AncestorType=Window}, Path=DataContext.FileClick}" />
             <GridSplitter Grid.Column="1"
                           Width="5"
                           HorizontalAlignment="Stretch" />

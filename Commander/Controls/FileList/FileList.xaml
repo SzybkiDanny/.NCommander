@@ -15,6 +15,7 @@
     </UserControl.DataContext>
     <UserControl.Resources>
         <ResourceDictionary>
+            <MouseGesture x:Key="ClickGesture" MouseAction="LeftClick" Modifiers="Control" />
             <Style TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment"
                         Value="Stretch" />
@@ -23,9 +24,9 @@
             <DataTemplate x:Key="IconTemplate"
                           DataType="viewModels:FileViewModel">
                 <Image Source="{Binding Ico}"
-                       Height="16px">
+                       Height="24px">
                     <Image.InputBindings>
-                        <MouseBinding Gesture="LeftDoubleClick"
+                        <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
                                       Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </Image.InputBindings>
@@ -36,7 +37,7 @@
                           DataType="viewModels:FileSystemItemViewModel">
                 <TextBlock Text="{Binding DisplayName}">
                     <TextBlock.InputBindings>
-                        <MouseBinding Gesture="LeftDoubleClick"
+                        <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
                                       Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
@@ -47,7 +48,7 @@
                           DataType="viewModels:FileViewModel">
                 <TextBlock Text="{Binding Extension}">
                     <TextBlock.InputBindings>
-                        <MouseBinding Gesture="LeftDoubleClick"
+                        <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
                                       Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
@@ -58,7 +59,7 @@
                           DataType="viewModels:FileViewModel">
                 <TextBlock Text="{Binding Size}">
                     <TextBlock.InputBindings>
-                        <MouseBinding Gesture="LeftDoubleClick"
+                        <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
                                       Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
@@ -69,7 +70,7 @@
                           DataType="viewModels:FileSystemItemViewModel">
                 <TextBlock Text="{Binding ModificationDate}">
                     <TextBlock.InputBindings>
-                        <MouseBinding Gesture="LeftDoubleClick"
+                        <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
                                       Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
@@ -80,7 +81,7 @@
                           DataType="viewModels:FileSystemItemViewModel">
                 <TextBlock Text="{Binding Attributes}">
                     <TextBlock.InputBindings>
-                        <MouseBinding Gesture="LeftDoubleClick"
+                        <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
                                       Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
@@ -106,21 +107,41 @@
                     <GridViewColumn Header=""
                                     Width="32"
                                     CellTemplate="{StaticResource IconTemplate}" />
-                    <GridViewColumn Header="Name"
-                                    Width="120"
-                                    CellTemplate="{StaticResource NameTemplate}" />
-                    <GridViewColumn Header="Ext"
-                                    Width="50"
-                                    CellTemplate="{StaticResource ExtensionTemplate}" />
-                    <GridViewColumn Header="Size"
-                                    Width="80"
-                                    CellTemplate="{StaticResource SizeTemplate}" />
-                    <GridViewColumn Header="ModificationDate"
-                                    Width="80"
-                                    CellTemplate="{StaticResource ModificationDateTemplate}" />
-                    <GridViewColumn Header="Attr"
-                                    Width="50"
-                                    CellTemplate="{StaticResource AttributesTemplate}" />
+                    <GridViewColumn Width="120"
+                                    CellTemplate="{StaticResource NameTemplate}">
+                        <GridViewColumnHeader 
+                            Content="Name"
+                            Command="{Binding OrderCommand}"
+                            CommandParameter="Name"/>
+                    </GridViewColumn>
+                    <GridViewColumn Width="50"
+                                    CellTemplate="{StaticResource ExtensionTemplate}">
+                        <GridViewColumnHeader 
+                            Content="Ext"
+                            Command="{Binding OrderCommand}"
+                            CommandParameter="Extension"/>
+                    </GridViewColumn>
+                    <GridViewColumn Width="80"
+                                    CellTemplate="{StaticResource SizeTemplate}">
+                        <GridViewColumnHeader 
+                            Content="Size"
+                            Command="{Binding OrderCommand}"
+                            CommandParameter="Size"/>
+                    </GridViewColumn>
+                    <GridViewColumn Width="80"
+                                    CellTemplate="{StaticResource ModificationDateTemplate}">
+                        <GridViewColumnHeader 
+                            Content="Modified"
+                            Command="{Binding OrderCommand}"
+                            CommandParameter="Modified"/>
+                    </GridViewColumn>
+                    <GridViewColumn Width="50"
+                                    CellTemplate="{StaticResource AttributesTemplate}">
+                        <GridViewColumnHeader 
+                            Content="Attr"
+                            Command="{Binding OrderCommand}"
+                            CommandParameter="Attributes"/>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

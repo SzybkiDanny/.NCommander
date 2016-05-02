@@ -20,6 +20,12 @@ namespace Commander.Controls.FileList.ViewModels
         public FileListViewModel()
         {
             LoadPathCommand = new DelegateCommand<string>(GetPathFiles);
+            OrderCommand = new DelegateCommand<string>(ExecuteMethod);
+        }
+
+        private void ExecuteMethod(string s)
+        {
+            throw new NotImplementedException();
         }
 
         public string CurrentPath
@@ -35,29 +41,31 @@ namespace Commander.Controls.FileList.ViewModels
         }
 
         public ICommand LoadPathCommand { get; private set; }
+        public ICommand OrderCommand { get; private set; }
 
         private void GetPathFiles(string path)
         {
             Task.Run(() =>
             {
+                var rootDirectory = new DirectoryInfo(path);
                 Files =
                     new ObservableCollection<FileSystemItemViewModel>(
-                        Directory.GetDirectories(path)
-                            .Select(FileSystemItemViewModel.Create)
-                            .Concat(Directory.GetFiles(path).Select(FileSystemItemViewModel.Create)));
-                var newDirectory = new DirectoryInfo(path);
-                if (newDirectory?.Parent != null)
-                    Files.Insert(0, new DirectoryViewModel(newDirectory.Parent?.FullName) { DisplayName = ".." });
+                        rootDirectory.EnumerateFileSystemInfos()
+                            .Where(f => (f.Attributes & (FileAttributes.System | FileAttributes.Hidden)) == 0)
+                            .Select(f => FileSystemItemViewModel.Create(f.FullName)));
+
+                if (rootDirectory.Parent != null)
+                    Files.Insert(0, new DirectoryViewModel(rootDirectory.Parent?.FullName) {DisplayName = ".."});
                 CurrentPath = path;
             });
         }
 
-        private static void UiInvoke(Action action)
-        {
-            if (!Application.Current.Dispatcher.CheckAccess())
-                Application.Current.Dispatcher.Invoke(action);
-            else
-                action();
-        }
+        //private static void UiInvoke(Action action)
+        //{
+        //    if (!Application.Current.Dispatcher.CheckAccess())
+        //        Application.Current.Dispatcher.Invoke(action);
+        //    else
+        //        action();
+        //}
     }
 }
