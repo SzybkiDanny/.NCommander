@@ -20,7 +20,7 @@ namespace Commander.Controls.FileList.ViewModels
         private CollectionViewSource _filesDataView = new CollectionViewSource();
         private string _sortColumn;
         private ListSortDirection _sortDirection;
-        private FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
+        private readonly FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
         private bool _isDisposed;
 
         public FileListViewModel()

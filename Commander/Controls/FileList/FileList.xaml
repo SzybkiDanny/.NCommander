@@ -40,6 +40,9 @@
                         <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
                                       Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
+                        <KeyBinding Key="Enter"
+                                    CommandParameter="{Binding FileSystemItem}"
+                                    Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
                 </TextBlock>
             </DataTemplate>
@@ -109,38 +112,38 @@
                                     CellTemplate="{StaticResource IconTemplate}" />
                     <GridViewColumn Width="120"
                                     CellTemplate="{StaticResource NameTemplate}">
-                        <GridViewColumnHeader 
+                        <GridViewColumnHeader
                             Content="Name"
                             Command="{Binding OrderCommand}"
-                            CommandParameter="DisplayName"/>
+                            CommandParameter="DisplayName" />
                     </GridViewColumn>
                     <GridViewColumn Width="50"
                                     CellTemplate="{StaticResource ExtensionTemplate}">
-                        <GridViewColumnHeader 
+                        <GridViewColumnHeader
                             Content="Ext"
                             Command="{Binding OrderCommand}"
-                            CommandParameter="Extension"/>
+                            CommandParameter="Extension" />
                     </GridViewColumn>
                     <GridViewColumn Width="80"
                                     CellTemplate="{StaticResource SizeTemplate}">
-                        <GridViewColumnHeader 
+                        <GridViewColumnHeader
                             Content="Size"
                             Command="{Binding OrderCommand}"
-                            CommandParameter="Size"/>
+                            CommandParameter="Size" />
                     </GridViewColumn>
                     <GridViewColumn Width="80"
                                     CellTemplate="{StaticResource ModificationDateTemplate}">
-                        <GridViewColumnHeader 
+                        <GridViewColumnHeader
                             Content="Modified"
                             Command="{Binding OrderCommand}"
-                            CommandParameter="ModificationDate"/>
+                            CommandParameter="ModificationDate" />
                     </GridViewColumn>
                     <GridViewColumn Width="50"
                                     CellTemplate="{StaticResource AttributesTemplate}">
-                        <GridViewColumnHeader 
+                        <GridViewColumnHeader
                             Content="Attr"
                             Command="{Binding OrderCommand}"
-                            CommandParameter="Attributes"/>
+                            CommandParameter="Attributes" />
                     </GridViewColumn>
                 </GridView>
             </ListView.View>

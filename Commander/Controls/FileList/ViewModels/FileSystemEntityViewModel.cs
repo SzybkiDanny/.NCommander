@@ -4,11 +4,10 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using Commander.Controls.FileList.Win32;
-using Microsoft.Practices.Prism.Mvvm;
 
 namespace Commander.Controls.FileList.ViewModels
 {
-    public abstract class FileSystemItemViewModel
+    public abstract class FileSystemEntityViewModel
     {
         private string _displayName;
 
@@ -40,9 +39,9 @@ namespace Commander.Controls.FileList.ViewModels
             }
         }
 
-        public static FileSystemItemViewModel Create(string path)
+        public static FileSystemEntityViewModel Create(string path)
         {
-            return File.GetAttributes(path).HasFlag(FileAttributes.Directory) ? (FileSystemItemViewModel) new DirectoryViewModel(path) : new FileViewModel(path);
+            return File.GetAttributes(path).HasFlag(FileAttributes.Directory) ? (FileSystemEntityViewModel) new DirectoryViewModel(path) : new FileViewModel(path);
         }
     }
 }
