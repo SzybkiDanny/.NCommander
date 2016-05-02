@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -13,20 +12,20 @@ using Microsoft.Practices.Prism.Mvvm;
 
 namespace Commander.Controls.FileList.ViewModels
 {
-    public class FileListViewModel : BindableBase
+    public class FileListViewModel : BindableBase, IDisposable
     {
         private string _currentPath = @"D:\";
-
         private ObservableCollection<FileSystemItemViewModel> _files =
             new ObservableCollection<FileSystemItemViewModel>();
-
         private CollectionViewSource _filesDataView = new CollectionViewSource();
         private string _sortColumn;
         private ListSortDirection _sortDirection;
+        private FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
+        private bool _isDisposed;
 
         public FileListViewModel()
         {
-            LoadPathCommand = new DelegateCommand<string>(GetPathFiles);
+            LoadPathCommand = new DelegateCommand<string>(LoadPathFiles);
             OrderCommand = new DelegateCommand<string>(OrderFiles);
         }
 
@@ -51,7 +50,7 @@ namespace Commander.Controls.FileList.ViewModels
         public ICommand OrderCommand { get; private set; }
         public ListCollectionView FilesDataView => _filesDataView.View as ListCollectionView;
 
-        private void GetPathFiles(string path)
+        private void LoadPathFiles(string path)
         {
             Task.Run(() =>
             {
@@ -66,6 +65,7 @@ namespace Commander.Controls.FileList.ViewModels
                 if (rootDirectory.Parent != null)
                     UiInvoke(() => Files.Insert(0, new DirectoryViewModel(rootDirectory.Parent?.FullName) {DisplayName = ".."}));
                 CurrentPath = path;
+                SetUpFileWatcher(path);
             });
         }
 
@@ -92,6 +92,30 @@ namespace Commander.Controls.FileList.ViewModels
                 Application.Current.Dispatcher.Invoke(action);
             else
                 action();
+        }
+
+        private void SetUpFileWatcher(string path)
+        {
+            FileSystemEventHandler fileSystemChangeHandler =
+                delegate {
+                    LoadPathFiles(path);
+                };
+
+            _fileSystemWatcher.EnableRaisingEvents = false;
+            _fileSystemWatcher.Path = path;
+            _fileSystemWatcher.Changed += fileSystemChangeHandler;
+            _fileSystemWatcher.Created += fileSystemChangeHandler;
+            _fileSystemWatcher.Deleted += fileSystemChangeHandler;
+            _fileSystemWatcher.Renamed += (sender, args) => LoadPathFiles(path);
+            _fileSystemWatcher.EnableRaisingEvents = true;
+        }
+
+        public void Dispose()
+        {
+            if (_isDisposed)
+                return;
+            _fileSystemWatcher.Dispose();
+            _isDisposed = true;
         }
     }
 }
