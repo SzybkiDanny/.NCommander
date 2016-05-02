@@ -97,13 +97,13 @@
                 Load
             </Button>
         </StackPanel>
-        <ListView ItemsSource="{Binding Files}"
+        <ListView ItemsSource="{Binding FilesDataView}"
                   AllowDrop="True"
                   MouseMove="ListView_MouseMove"
                   DragEnter="ListView_DragEnter"
                   Drop="ListView_Drop">
             <ListView.View>
-                <GridView ColumnHeaderToolTip="Authors">
+                <GridView>
                     <GridViewColumn Header=""
                                     Width="32"
                                     CellTemplate="{StaticResource IconTemplate}" />
@@ -112,7 +112,7 @@
                         <GridViewColumnHeader 
                             Content="Name"
                             Command="{Binding OrderCommand}"
-                            CommandParameter="Name"/>
+                            CommandParameter="DisplayName"/>
                     </GridViewColumn>
                     <GridViewColumn Width="50"
                                     CellTemplate="{StaticResource ExtensionTemplate}">
@@ -133,7 +133,7 @@
                         <GridViewColumnHeader 
                             Content="Modified"
                             Command="{Binding OrderCommand}"
-                            CommandParameter="Modified"/>
+                            CommandParameter="ModificationDate"/>
                     </GridViewColumn>
                     <GridViewColumn Width="50"
                                     CellTemplate="{StaticResource AttributesTemplate}">
