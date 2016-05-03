@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GongSolutions.Wpf.DragDrop, Version=0.1.4.3, Culture=neutral, PublicKeyToken=d19974ea350ccea1, processorArchitecture=MSIL">
+      <HintPath>..\packages\gong-wpf-dragdrop.0.1.4.3\lib\net40\GongSolutions.Wpf.DragDrop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.Prism.Mvvm, Version=1.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
       <Private>True</Private>
@@ -47,6 +51,7 @@
       <HintPath>..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.SharedInterfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -72,7 +77,7 @@
       <DependentUpon>FileList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\FileList\ViewModels\FileListViewModel.cs" />
-    <Compile Include="Controls\FileList\ViewModels\FileSystemItemViewModel.cs" />
+    <Compile Include="Controls\FileList\ViewModels\FileSystemEntityViewModel.cs" />
     <Compile Include="Controls\FileList\ViewModels\DirectoryViewModel.cs" />
     <Compile Include="Controls\FileList\ViewModels\FileViewModel.cs" />
     <Compile Include="Controls\FileList\Win32\SHFILEINFO.cs" />

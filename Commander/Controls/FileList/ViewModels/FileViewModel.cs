@@ -2,7 +2,7 @@
 
 namespace Commander.Controls.FileList.ViewModels
 {
-    public class FileViewModel : FileSystemItemViewModel
+    public class FileViewModel : FileSystemEntityViewModel
     {
         public long? Size => (FileSystemItem as FileInfo)?.Length;
         public string Extension => FileSystemItem.Extension;

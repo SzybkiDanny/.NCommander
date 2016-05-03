@@ -2,7 +2,7 @@
 
 namespace Commander.Controls.FileList.ViewModels
 {
-    public class DirectoryViewModel : FileSystemItemViewModel
+    public class DirectoryViewModel : FileSystemEntityViewModel
     {
         public override FileSystemInfo FileSystemItem { get; }
 

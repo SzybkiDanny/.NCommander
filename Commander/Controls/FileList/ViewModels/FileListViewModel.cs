@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -7,14 +8,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using GongSolutions.Wpf.DragDrop;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 
 namespace Commander.Controls.FileList.ViewModels
 {
-    public class FileListViewModel : BindableBase, IDisposable
+    public class FileListViewModel : BindableBase, IDisposable, IDropTarget
     {
-        private string _currentPath = @"D:\";
+        private const string ParentDirectoryDisplayName = "..";
+        private string _currentPath;
         private ObservableCollection<FileSystemEntityViewModel> _files =
             new ObservableCollection<FileSystemEntityViewModel>();
         private CollectionViewSource _filesDataView = new CollectionViewSource();
@@ -77,7 +80,7 @@ namespace Commander.Controls.FileList.ViewModels
                                 .Select(f => FileSystemEntityViewModel.Create(f.FullName)))
                     );
                 if (rootDirectory.Parent != null)
-                    UiInvoke(() => Files.Insert(0, new DirectoryViewModel(rootDirectory.Parent?.FullName) {DisplayName = ".."}));
+                    UiInvoke(() => Files.Insert(0, new DirectoryViewModel(rootDirectory.Parent?.FullName) {DisplayName = ParentDirectoryDisplayName}));
                 CurrentPath = path;
                 SetUpFileWatcher(path);
             });
@@ -105,7 +108,7 @@ namespace Commander.Controls.FileList.ViewModels
             if (!Application.Current.Dispatcher.CheckAccess())
                 Application.Current.Dispatcher.Invoke(action);
             else
-                action();
+                action?.Invoke();
         }
 
         private void SetUpFileWatcher(string path)
@@ -130,6 +133,28 @@ namespace Commander.Controls.FileList.ViewModels
                 return;
             _fileSystemWatcher.Dispose();
             _isDisposed = true;
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            if (!(dropInfo.Data is FileSystemEntityViewModel || dropInfo.Data is IList<FileSystemEntityViewModel>))
+                return;
+            if (dropInfo.TargetItem is FileViewModel)
+                return;
+            dropInfo.Effects = (dropInfo.KeyStates & DragDropKeyStates.ControlKey) != 0 ? DragDropEffects.Copy : DragDropEffects.Move;
+            dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            if (dropInfo.TargetItem == null)
+            {
+                //Move/copy items to current path directory
+            }
+            else
+            {
+                //Move/copy items to selected directory
+            }
         }
     }
 }
