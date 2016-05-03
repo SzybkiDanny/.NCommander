@@ -101,14 +101,14 @@
                   SelectedValuePath="Name" />
         <StackPanel DockPanel.Dock="Bottom">
             <TextBox Name="CurrentPathTextBox"
-                     Text="{Binding CurrentPath, Mode=TwoWay}"/>
+                     Text="{Binding CurrentPath, Mode=TwoWay}" />
             <Button Content="Load"
                     Command="{Binding Path=LoadPathCommand}"
                     CommandParameter="{Binding ElementName=CurrentPathTextBox, Path=Text}" />
         </StackPanel>
         <ListView ItemsSource="{Binding FilesDataView}"
                   IsSynchronizedWithCurrentItem="True"
-                  dragDrop:DragDrop.IsDragSource="True" 
+                  dragDrop:DragDrop.IsDragSource="True"
                   dragDrop:DragDrop.IsDropTarget="True"
                   dragDrop:DragDrop.DropHandler="{Binding}">
             <ListView.View>

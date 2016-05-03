@@ -16,9 +16,11 @@ namespace Commander.Controls.FileList.ViewModels
             get { return _displayName ?? FileSystemItem.Name; }
             set { _displayName = value; }
         }
+
         public DateTime ModificationDate => FileSystemItem.LastWriteTime;
         public string Attributes => FileSystemItem.Attributes.ToString();
         public abstract FileSystemInfo FileSystemItem { get; }
+
         public Stream Ico
         {
             get
@@ -41,7 +43,9 @@ namespace Commander.Controls.FileList.ViewModels
 
         public static FileSystemEntityViewModel Create(string path)
         {
-            return File.GetAttributes(path).HasFlag(FileAttributes.Directory) ? (FileSystemEntityViewModel) new DirectoryViewModel(path) : new FileViewModel(path);
+            return File.GetAttributes(path).HasFlag(FileAttributes.Directory)
+                ? (FileSystemEntityViewModel) new DirectoryViewModel(path)
+                : new FileViewModel(path);
         }
     }
 }

@@ -17,15 +17,17 @@ namespace Commander.Controls.FileList.ViewModels
     public class FileListViewModel : BindableBase, IDisposable, IDropTarget
     {
         private const string ParentDirectoryDisplayName = "..";
+        private readonly FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
         private string _currentPath;
+
         private ObservableCollection<FileSystemEntityViewModel> _files =
             new ObservableCollection<FileSystemEntityViewModel>();
+
         private CollectionViewSource _filesDataView = new CollectionViewSource();
-        private string _sortColumn;
-        private ListSortDirection _sortDirection;
-        private readonly FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
         private bool _isDisposed;
         private DriveInfo _selectedDrive;
+        private string _sortColumn;
+        private ListSortDirection _sortDirection;
 
         public FileListViewModel()
         {
@@ -65,6 +67,34 @@ namespace Commander.Controls.FileList.ViewModels
             }
         }
 
+        public void Dispose()
+        {
+            if (_isDisposed)
+                return;
+            _fileSystemWatcher.Dispose();
+            _isDisposed = true;
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            if (!(dropInfo.Data is FileSystemEntityViewModel || dropInfo.Data is IList<FileSystemEntityViewModel>))
+                return;
+            if (dropInfo.TargetItem is FileViewModel)
+                return;
+            dropInfo.Effects = (dropInfo.KeyStates & DragDropKeyStates.ControlKey) != 0
+                ? DragDropEffects.Copy
+                : DragDropEffects.Move;
+            dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            if (dropInfo.TargetItem == null)
+            {
+                //Move/copy items to current path directory
+            }
+        }
+
         private void LoadPathFiles(string path)
         {
             if (!Directory.Exists(path))
@@ -80,7 +110,13 @@ namespace Commander.Controls.FileList.ViewModels
                                 .Select(f => FileSystemEntityViewModel.Create(f.FullName)))
                     );
                 if (rootDirectory.Parent != null)
-                    UiInvoke(() => Files.Insert(0, new DirectoryViewModel(rootDirectory.Parent?.FullName) {DisplayName = ParentDirectoryDisplayName}));
+                    UiInvoke(
+                        () =>
+                            Files.Insert(0,
+                                new DirectoryViewModel(rootDirectory.Parent?.FullName)
+                                {
+                                    DisplayName = ParentDirectoryDisplayName
+                                }));
                 CurrentPath = path;
                 SetUpFileWatcher(path);
             });
@@ -114,9 +150,7 @@ namespace Commander.Controls.FileList.ViewModels
         private void SetUpFileWatcher(string path)
         {
             FileSystemEventHandler fileSystemChangeHandler =
-                delegate {
-                    LoadPathFiles(path);
-                };
+                delegate { LoadPathFiles(path); };
 
             _fileSystemWatcher.EnableRaisingEvents = false;
             _fileSystemWatcher.Path = path;
@@ -125,36 +159,6 @@ namespace Commander.Controls.FileList.ViewModels
             _fileSystemWatcher.Deleted += fileSystemChangeHandler;
             _fileSystemWatcher.Renamed += (sender, args) => LoadPathFiles(path);
             _fileSystemWatcher.EnableRaisingEvents = true;
-        }
-
-        public void Dispose()
-        {
-            if (_isDisposed)
-                return;
-            _fileSystemWatcher.Dispose();
-            _isDisposed = true;
-        }
-
-        public void DragOver(IDropInfo dropInfo)
-        {
-            if (!(dropInfo.Data is FileSystemEntityViewModel || dropInfo.Data is IList<FileSystemEntityViewModel>))
-                return;
-            if (dropInfo.TargetItem is FileViewModel)
-                return;
-            dropInfo.Effects = (dropInfo.KeyStates & DragDropKeyStates.ControlKey) != 0 ? DragDropEffects.Copy : DragDropEffects.Move;
-            dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-        }
-
-        public void Drop(IDropInfo dropInfo)
-        {
-            if (dropInfo.TargetItem == null)
-            {
-                //Move/copy items to current path directory
-            }
-            else
-            {
-                //Move/copy items to selected directory
-            }
         }
     }
 }

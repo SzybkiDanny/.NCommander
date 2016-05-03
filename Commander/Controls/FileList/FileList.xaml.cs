@@ -22,22 +22,22 @@ namespace Commander.Controls.FileList
                 typeof (FileList),
                 new UIPropertyMetadata(null));
 
+        public FileList()
+        {
+            InitializeComponent();
+            FileSelectedInternal = new DelegateCommand<FileSystemInfo>(HandleEntitySelection);
+        }
+
         public ICommand FileSelected
         {
-            get { return (ICommand)GetValue(FileSelectedProperty); }
+            get { return (ICommand) GetValue(FileSelectedProperty); }
             set { SetValue(FileSelectedProperty, value); }
         }
 
         private ICommand FileSelectedInternal
         {
-            get { return (ICommand)GetValue(FileSelectedInternalProperty); }
+            get { return (ICommand) GetValue(FileSelectedInternalProperty); }
             set { SetValue(FileSelectedInternalProperty, value); }
-        }
-
-        public FileList()
-        {
-            InitializeComponent();
-            FileSelectedInternal = new DelegateCommand<FileSystemInfo>(HandleEntitySelection);
         }
 
         private void HandleEntitySelection(FileSystemInfo fileSystemInfo)
