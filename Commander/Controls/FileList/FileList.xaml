@@ -27,9 +27,9 @@
                 <Image Source="{Binding Ico}"
                        Height="24px">
                     <Image.InputBindings>
-                        <!--<MouseBinding Gesture="{StaticResource ClickGesture}"
+                        <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
-                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />-->
+                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </Image.InputBindings>
                 </Image>
             </DataTemplate>
@@ -38,12 +38,9 @@
                           DataType="viewModels:FileSystemEntityViewModel">
                 <TextBlock Text="{Binding DisplayName}">
                     <TextBlock.InputBindings>
-                        <!--<MouseBinding Gesture="{StaticResource ClickGesture}"
+                        <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
-                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />-->
-                        <KeyBinding Key="Enter"
-                                    Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}"
-                                    CommandParameter="{Binding FileSystemItem}" />
+                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
                 </TextBlock>
             </DataTemplate>
@@ -52,9 +49,9 @@
                           DataType="viewModels:FileViewModel">
                 <TextBlock Text="{Binding Extension}">
                     <TextBlock.InputBindings>
-                        <!--<MouseBinding Gesture="{StaticResource ClickGesture}"
+                        <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
-                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />-->
+                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
                 </TextBlock>
             </DataTemplate>
@@ -63,9 +60,9 @@
                           DataType="viewModels:FileViewModel">
                 <TextBlock Text="{Binding Size}">
                     <TextBlock.InputBindings>
-                        <!--<MouseBinding Gesture="{StaticResource ClickGesture}"
+                        <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
-                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />-->
+                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
                 </TextBlock>
             </DataTemplate>
@@ -74,9 +71,9 @@
                           DataType="viewModels:FileSystemEntityViewModel">
                 <TextBlock Text="{Binding ModificationDate}">
                     <TextBlock.InputBindings>
-                        <!--<MouseBinding Gesture="{StaticResource ClickGesture}"
+                        <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
-                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />-->
+                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
                 </TextBlock>
             </DataTemplate>
@@ -85,9 +82,9 @@
                           DataType="viewModels:FileSystemEntityViewModel">
                 <TextBlock Text="{Binding Attributes}">
                     <TextBlock.InputBindings>
-                        <!--<MouseBinding Gesture="{StaticResource ClickGesture}"
+                        <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"
-                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />-->
+                                      Command="{Binding ElementName=UserControl, Path=FileSelectedInternal}" />
                     </TextBlock.InputBindings>
                 </TextBlock>
             </DataTemplate>
@@ -113,8 +110,7 @@
                   dragDrop:DragDrop.DropHandler="{Binding}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header=""
-                                    Width="32"
+                    <GridViewColumn Width="32"
                                     CellTemplate="{StaticResource IconTemplate}" />
                     <GridViewColumn Width="120"
                                     CellTemplate="{StaticResource NameTemplate}">
