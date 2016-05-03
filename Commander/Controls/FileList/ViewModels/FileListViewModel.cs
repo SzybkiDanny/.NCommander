@@ -54,6 +54,7 @@ namespace Commander.Controls.FileList.ViewModels
 
         public ICommand LoadPathCommand { get; private set; }
         public ICommand OrderCommand { get; private set; }
+        public ICommand LoadParentDirectoryCommand { get; private set; }
         public ListCollectionView FilesDataView => _filesDataView.View as ListCollectionView;
         public DriveInfo[] AvailableDrives => DriveInfo.GetDrives();
 
@@ -93,6 +94,11 @@ namespace Commander.Controls.FileList.ViewModels
             {
                 //Move/copy items to current path directory
             }
+        }
+
+        public void LoadParentDirectory()
+        {
+            
         }
 
         private void LoadPathFiles(string path)

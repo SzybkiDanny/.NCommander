@@ -7,7 +7,11 @@
              xmlns:viewModels="clr-namespace:Commander.Controls.FileList.ViewModels"
              xmlns:fileList="clr-namespace:Commander.Controls.FileList"
              xmlns:dragDrop="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
              mc:Ignorable="d"
+             lex:LocalizeDictionary.DesignCulture="en"
+             lex:ResxLocalizationProvider.DefaultAssembly="Commander"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              d:DesignHeight="300"
              d:DesignWidth="300"
              x:Name="UserControl">
@@ -91,23 +95,32 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel>
-        <ComboBox DockPanel.Dock="Top"
-                  ItemsSource="{Binding AvailableDrives}"
-                  SelectedItem="{Binding SelectedDrive}"
-                  SelectedValue="{Binding SelectedDrive}"
-                  SelectedValuePath="Name" />
-        <StackPanel DockPanel.Dock="Bottom">
-            <TextBox Name="CurrentPathTextBox"
-                     Text="{Binding CurrentPath, Mode=TwoWay}" />
-            <Button Content="Load"
+        <DockPanel DockPanel.Dock="Top">
+            <Label Content="{lex:Loc disk}"/>
+            <ComboBox ItemsSource="{Binding AvailableDrives}"
+                      SelectedItem="{Binding SelectedDrive}"
+                      SelectedValue="{Binding SelectedDrive}"
+                      SelectedValuePath="Name" />
+        </DockPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <Button DockPanel.Dock="Right" Content="{lex:Loc load}"
                     Command="{Binding Path=LoadPathCommand}"
-                    CommandParameter="{Binding ElementName=CurrentPathTextBox, Path=Text}" />
-        </StackPanel>
+                    CommandParameter="{Binding ElementName=CurrentPathTextBox, Path=Text}"
+                    Padding="10,0,10,0"/>
+            <TextBox Name="CurrentPathTextBox"
+                     VerticalContentAlignment="Center"
+                     Height="24"
+                     Text="{Binding CurrentPath, Mode=TwoWay}" />
+            </DockPanel>
         <ListView ItemsSource="{Binding FilesDataView}"
                   IsSynchronizedWithCurrentItem="True"
                   dragDrop:DragDrop.IsDragSource="True"
                   dragDrop:DragDrop.IsDropTarget="True"
                   dragDrop:DragDrop.DropHandler="{Binding}">
+            <ListView.InputBindings>
+                <KeyBinding Key="Back"
+                            Command="{Binding LoadParentDirectoryCommand}" />
+            </ListView.InputBindings>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="32"
@@ -115,35 +128,35 @@
                     <GridViewColumn Width="120"
                                     CellTemplate="{StaticResource NameTemplate}">
                         <GridViewColumnHeader
-                            Content="Name"
+                            Content="{lex:Loc name}"
                             Command="{Binding OrderCommand}"
                             CommandParameter="DisplayName" />
                     </GridViewColumn>
                     <GridViewColumn Width="50"
                                     CellTemplate="{StaticResource ExtensionTemplate}">
                         <GridViewColumnHeader
-                            Content="Ext"
+                            Content="{lex:Loc extension}"
                             Command="{Binding OrderCommand}"
                             CommandParameter="Extension" />
                     </GridViewColumn>
                     <GridViewColumn Width="80"
                                     CellTemplate="{StaticResource SizeTemplate}">
                         <GridViewColumnHeader
-                            Content="Size"
+                            Content="{lex:Loc size}"
                             Command="{Binding OrderCommand}"
                             CommandParameter="Size" />
                     </GridViewColumn>
                     <GridViewColumn Width="80"
                                     CellTemplate="{StaticResource ModificationDateTemplate}">
                         <GridViewColumnHeader
-                            Content="Modified"
+                            Content="{lex:Loc modified}"
                             Command="{Binding OrderCommand}"
                             CommandParameter="ModificationDate" />
                     </GridViewColumn>
                     <GridViewColumn Width="50"
                                     CellTemplate="{StaticResource AttributesTemplate}">
                         <GridViewColumnHeader
-                            Content="Attr"
+                            Content="{lex:Loc attributes}"
                             Command="{Binding OrderCommand}"
                             CommandParameter="Attributes" />
                     </GridViewColumn>

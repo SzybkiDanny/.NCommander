@@ -6,16 +6,24 @@
         xmlns:loca="clr-namespace:Commander"
         xmlns:viewModels="clr-namespace:Commander.ViewModels"
         xmlns:fileList="clr-namespace:Commander.Controls.FileList"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
         mc:Ignorable="d"
+        lex:LocalizeDictionary.DesignCulture="en"
+        lex:ResxLocalizationProvider.DefaultAssembly="Commander"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
         Title=".NCommander" Height="500" Width="900">
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
     </Window.DataContext>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_Language">
-                <MenuItem Header="_PL" />
-                <MenuItem Header="_EN" />
+            <MenuItem Header="{lex:Loc language}">
+                <MenuItem Header="{lex:Loc english}"
+                          Command="{Binding ChangeLanguage}"
+                          CommandParameter="en-EN"/>
+                <MenuItem Header="{lex:Loc polish}"
+                          Command="{Binding ChangeLanguage}"
+                          CommandParameter="pl-PL" />
             </MenuItem>
         </Menu>
         <Grid>
