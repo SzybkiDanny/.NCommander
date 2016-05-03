@@ -15,13 +15,14 @@ namespace Commander.Controls.FileList.ViewModels
     public class FileListViewModel : BindableBase, IDisposable
     {
         private string _currentPath = @"D:\";
-        private ObservableCollection<FileSystemItemViewModel> _files =
-            new ObservableCollection<FileSystemItemViewModel>();
+        private ObservableCollection<FileSystemEntityViewModel> _files =
+            new ObservableCollection<FileSystemEntityViewModel>();
         private CollectionViewSource _filesDataView = new CollectionViewSource();
         private string _sortColumn;
         private ListSortDirection _sortDirection;
         private readonly FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
         private bool _isDisposed;
+        private DriveInfo _selectedDrive;
 
         public FileListViewModel()
         {
@@ -35,7 +36,7 @@ namespace Commander.Controls.FileList.ViewModels
             set { SetProperty(ref _currentPath, value); }
         }
 
-        public ObservableCollection<FileSystemItemViewModel> Files
+        public ObservableCollection<FileSystemEntityViewModel> Files
         {
             get { return _files; }
             set
@@ -49,18 +50,31 @@ namespace Commander.Controls.FileList.ViewModels
         public ICommand LoadPathCommand { get; private set; }
         public ICommand OrderCommand { get; private set; }
         public ListCollectionView FilesDataView => _filesDataView.View as ListCollectionView;
+        public DriveInfo[] AvailableDrives => DriveInfo.GetDrives();
+
+        public DriveInfo SelectedDrive
+        {
+            get { return _selectedDrive ?? AvailableDrives.FirstOrDefault(); }
+            set
+            {
+                SetProperty(ref _selectedDrive, value);
+                CurrentPath = _selectedDrive.Name;
+            }
+        }
 
         private void LoadPathFiles(string path)
         {
+            if (!Directory.Exists(path))
+                return;
             Task.Run(() =>
             {
                 var rootDirectory = new DirectoryInfo(path);
                 UiInvoke(() =>
                     Files =
-                        new ObservableCollection<FileSystemItemViewModel>(
+                        new ObservableCollection<FileSystemEntityViewModel>(
                             rootDirectory.EnumerateFileSystemInfos()
                                 .Where(f => (f.Attributes & (FileAttributes.System | FileAttributes.Hidden)) == 0)
-                                .Select(f => FileSystemItemViewModel.Create(f.FullName)))
+                                .Select(f => FileSystemEntityViewModel.Create(f.FullName)))
                     );
                 if (rootDirectory.Parent != null)
                     UiInvoke(() => Files.Insert(0, new DirectoryViewModel(rootDirectory.Parent?.FullName) {DisplayName = ".."}));
