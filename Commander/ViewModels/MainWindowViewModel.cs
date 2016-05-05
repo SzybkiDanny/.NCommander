@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.Mvvm;
 using WPFLocalizeExtension.Engine;
 
 namespace Commander.ViewModels
