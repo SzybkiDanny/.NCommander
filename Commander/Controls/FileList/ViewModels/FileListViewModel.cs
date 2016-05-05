@@ -34,6 +34,7 @@ namespace Commander.Controls.FileList.ViewModels
         {
             LoadPathCommand = new DelegateCommand<string>(LoadPathFiles);
             OrderCommand = new DelegateCommand<string>(OrderFiles);
+            DeleteEntitiesCommand = new DelegateCommand(DeleteSelected) ;
         }
 
         public string CurrentPath
@@ -56,8 +57,10 @@ namespace Commander.Controls.FileList.ViewModels
         public ICommand LoadPathCommand { get; private set; }
         public ICommand OrderCommand { get; private set; }
         public ICommand LoadParentDirectoryCommand { get; private set; }
+        public ICommand DeleteEntitiesCommand { get; private set; }
         public ListCollectionView FilesDataView => _filesDataView.View as ListCollectionView;
         public DriveInfo[] AvailableDrives => DriveInfo.GetDrives();
+        public IEnumerable<FileSystemEntityViewModel> SelectedEntities => Files.Where(e => e.IsSelected);
 
         public DriveInfo SelectedDrive
         {
@@ -123,11 +126,14 @@ namespace Commander.Controls.FileList.ViewModels
                 if (rootDirectory.Parent != null)
                     UiInvoke(
                         () =>
-                            Files.Insert(0,
-                                new DirectoryViewModel(rootDirectory.Parent?.FullName)
-                                {
-                                    DisplayName = ParentDirectoryDisplayName
-                                }));
+                        {
+                            if (Files.All(f => f.DisplayName != ParentDirectoryDisplayName))
+                                Files.Insert(0,
+                                    new DirectoryViewModel(rootDirectory.Parent?.FullName)
+                                    {
+                                        DisplayName = ParentDirectoryDisplayName
+                                    });
+                        });
                 CurrentPath = path;
                 SetUpFileWatcher(path);
             });
@@ -172,24 +178,46 @@ namespace Commander.Controls.FileList.ViewModels
             _fileSystemWatcher.EnableRaisingEvents = true;
         }
 
+        private void DeleteSelected()
+        {
+            Task.Run(() =>
+            {
+                foreach (var file in SelectedEntities.OfType<FileViewModel>())
+                    FileSystem.DeleteFile(file.FileSystemItem.FullName, UIOption.AllDialogs,
+                        RecycleOption.SendToRecycleBin);
+                foreach (
+                    var directory in
+                        SelectedEntities.OfType<DirectoryViewModel>()
+                            .Where(d => d.DisplayName != ParentDirectoryDisplayName))
+                    FileSystem.DeleteDirectory(directory.FileSystemItem.FullName, UIOption.AllDialogs,
+                        RecycleOption.SendToRecycleBin, UICancelOption.DoNothing);
+            });
+        }
+
         private static void CopyItems(IList<FileSystemEntityViewModel> fileSystemEntityViewModels,
             string destinationPath)
         {
-            foreach (var file in fileSystemEntityViewModels.OfType<FileViewModel>())
-                FileSystem.CopyFile(file.FileSystemItem.FullName, $"{destinationPath}/{file.FileSystemItem.Name}");
-            foreach (var directory in fileSystemEntityViewModels.OfType<DirectoryViewModel>())
-                FileSystem.CopyDirectory(directory.FileSystemItem.FullName,
-                    $"{destinationPath}/{directory.FileSystemItem.Name}");
+            Task.Run(() =>
+            {
+                foreach (var file in fileSystemEntityViewModels.OfType<FileViewModel>())
+                    FileSystem.CopyFile(file.FileSystemItem.FullName, $"{destinationPath}/{file.FileSystemItem.Name}", UIOption.AllDialogs);
+                foreach (var directory in fileSystemEntityViewModels.OfType<DirectoryViewModel>().Where(d => !destinationPath.Contains(d.FileSystemItem.FullName)))
+                    FileSystem.CopyDirectory(directory.FileSystemItem.FullName,
+                        $"{destinationPath}/{directory.FileSystemItem.Name}", UIOption.AllDialogs);
+            });
         }
 
         private static void MoveItems(IList<FileSystemEntityViewModel> fileSystemEntityViewModels,
             string destinationPath)
         {
-            foreach (var file in fileSystemEntityViewModels.OfType<FileViewModel>())
-                FileSystem.MoveFile(file.FileSystemItem.FullName, $"{destinationPath}/{file.FileSystemItem.Name}");
-            foreach (var directory in fileSystemEntityViewModels.OfType<DirectoryViewModel>())
-                FileSystem.MoveDirectory(directory.FileSystemItem.FullName,
-                    $"{destinationPath}/{directory.FileSystemItem.Name}");
+            Task.Run(() =>
+            {
+                foreach (var file in fileSystemEntityViewModels.OfType<FileViewModel>())
+                    FileSystem.MoveFile(file.FileSystemItem.FullName, $"{destinationPath}/{file.FileSystemItem.Name}", UIOption.AllDialogs);
+                foreach (var directory in fileSystemEntityViewModels.OfType<DirectoryViewModel>())
+                    FileSystem.MoveDirectory(directory.FileSystemItem.FullName,
+                        $"{destinationPath}/{directory.FileSystemItem.Name}", UIOption.AllDialogs);
+            });
         }
     }
 }

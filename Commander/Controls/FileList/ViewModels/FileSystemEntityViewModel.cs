@@ -19,6 +19,7 @@ namespace Commander.Controls.FileList.ViewModels
 
         public DateTime ModificationDate => FileSystemItem.LastWriteTime;
         public string Attributes => FileSystemItem.Attributes.ToString();
+        public bool IsSelected { get; set; }
         public abstract FileSystemInfo FileSystemItem { get; }
 
         public Stream Ico

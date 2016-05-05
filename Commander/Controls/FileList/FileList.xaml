@@ -24,6 +24,7 @@
             <Style TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment"
                         Value="Stretch" />
+                <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
             </Style>
             <!--Unfortunately the templates cannot be reused as it's not possible to set both DisplayMemberBinding and CellTempate on GridViewColumn.-->
             <DataTemplate x:Key="IconTemplate"
@@ -99,7 +100,8 @@
             <Label Content="{lex:Loc disk}"/>
             <Button DockPanel.Dock="Right"
                     Content="{lex:Loc delete}"
-                    Padding="10,0,10,0"/>
+                    Padding="10,0,10,0"
+                    Command="{Binding DeleteEntitiesCommand}"/>
             <ComboBox ItemsSource="{Binding AvailableDrives}"
                       SelectedItem="{Binding SelectedDrive}"
                       SelectedValue="{Binding SelectedDrive}"
