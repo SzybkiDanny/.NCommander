@@ -81,8 +81,9 @@ namespace Commander.Controls.FileList.ViewModels
         }
 
         public void DragOver(IDropInfo dropInfo)
-        {
-            if (!(dropInfo.Data is FileSystemEntityViewModel || dropInfo.Data is IList<FileSystemEntityViewModel>))
+        {   
+            if (!(dropInfo.Data is FileSystemEntityViewModel || dropInfo.Data is IList<FileSystemEntityViewModel>
+                || dropInfo.Data is IList<FileViewModel> || dropInfo.Data is IList<DirectoryViewModel>))
                 return;
             if (dropInfo.TargetItem is FileViewModel)
                 return;
@@ -99,13 +100,18 @@ namespace Commander.Controls.FileList.ViewModels
                 destinationPath = ((DirectoryViewModel) dropInfo.TargetItem).FileSystemItem.FullName;
 
             var fileSystemAction = (dropInfo.KeyStates & DragDropKeyStates.ShiftKey) != 0
-                ? (Action<IList<FileSystemEntityViewModel>, string>) CopyItems
+                ? (Action<IList<FileSystemEntityViewModel>,string>) CopyItems
                 : MoveItems;
 
             if (dropInfo.Data is FileSystemEntityViewModel)
                 fileSystemAction(new[] {(FileSystemEntityViewModel) dropInfo.Data}, destinationPath);
             else if (dropInfo.Data is IList<FileSystemEntityViewModel>)
                 fileSystemAction((IList<FileSystemEntityViewModel>) dropInfo.Data, destinationPath);
+            else if (dropInfo.Data is IList<FileViewModel>)
+                fileSystemAction(((IList<FileViewModel>) dropInfo.Data).Cast<FileSystemEntityViewModel>().ToList(), destinationPath);
+            else if (dropInfo.Data is IList<DirectoryViewModel>)
+                fileSystemAction(((IList<DirectoryViewModel>) dropInfo.Data).Cast<FileSystemEntityViewModel>().ToList(), destinationPath);
+
         }
 
         private void LoadPathFiles(string path)
