@@ -20,7 +20,7 @@
     </UserControl.DataContext>
     <UserControl.Resources>
         <ResourceDictionary>
-            <MouseGesture x:Key="ClickGesture" MouseAction="LeftClick" Modifiers="Control" />
+            <MouseGesture x:Key="ClickGesture" MouseAction="LeftClick" Modifiers="Shift" />
             <Style TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment"
                         Value="Stretch" />

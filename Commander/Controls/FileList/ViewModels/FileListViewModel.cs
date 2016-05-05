@@ -83,7 +83,7 @@ namespace Commander.Controls.FileList.ViewModels
                 return;
             if (dropInfo.TargetItem is FileViewModel)
                 return;
-            dropInfo.Effects = (dropInfo.KeyStates & DragDropKeyStates.ControlKey) != 0
+            dropInfo.Effects = (dropInfo.KeyStates & DragDropKeyStates.ShiftKey) != 0
                 ? DragDropEffects.Copy
                 : DragDropEffects.Move;
             dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
@@ -91,15 +91,18 @@ namespace Commander.Controls.FileList.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.TargetItem == null)
-            {
-                //Move/copy items to current path directory
-            }
-        }
+            var destinationPath = CurrentPath;
+            if (dropInfo.TargetItem is DirectoryViewModel)
+                destinationPath = ((DirectoryViewModel) dropInfo.TargetItem).FileSystemItem.FullName;
 
-        public void LoadParentDirectory()
-        {
-            
+            var fileSystemAction = (dropInfo.KeyStates & DragDropKeyStates.ShiftKey) != 0
+                ? (Action<IList<FileSystemEntityViewModel>, string>) CopyItems
+                : MoveItems;
+
+            if (dropInfo.Data is FileSystemEntityViewModel)
+                fileSystemAction(new[] {(FileSystemEntityViewModel) dropInfo.Data}, destinationPath);
+            else if (dropInfo.Data is IList<FileSystemEntityViewModel>)
+                fileSystemAction((IList<FileSystemEntityViewModel>) dropInfo.Data, destinationPath);
         }
 
         private void LoadPathFiles(string path)
@@ -110,12 +113,13 @@ namespace Commander.Controls.FileList.ViewModels
             {
                 var rootDirectory = new DirectoryInfo(path);
                 UiInvoke(() =>
+                {
                     Files =
                         new ObservableCollection<FileSystemEntityViewModel>(
                             rootDirectory.EnumerateFileSystemInfos()
                                 .Where(f => (f.Attributes & (FileAttributes.System | FileAttributes.Hidden)) == 0)
-                                .Select(f => FileSystemEntityViewModel.Create(f.FullName)))
-                    );
+                                .Select(f => FileSystemEntityViewModel.Create(f.FullName)));
+                });
                 if (rootDirectory.Parent != null)
                     UiInvoke(
                         () =>
