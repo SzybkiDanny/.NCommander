@@ -90,6 +90,8 @@
     <Compile Include="Controls\FileList\ViewModels\FileViewModel.cs" />
     <Compile Include="Controls\FileList\Win32\SHFILEINFO.cs" />
     <Compile Include="Controls\FileList\Win32\Win32.cs" />
+    <Compile Include="Converters\CultureToBoolConverter.cs" />
+    <Compile Include="Converters\DateFormatConverter.cs" />
     <Compile Include="Properties\Resources.pl-PL.Designer.cs">
       <DependentUpon>Resources.pl-PL.resx</DependentUpon>
       <AutoGen>True</AutoGen>

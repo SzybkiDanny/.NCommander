@@ -8,6 +8,7 @@
              xmlns:fileList="clr-namespace:Commander.Controls.FileList"
              xmlns:dragDrop="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:converters="clr-namespace:Commander.Converters"
              mc:Ignorable="d"
              lex:LocalizeDictionary.DesignCulture="en"
              lex:ResxLocalizationProvider.DefaultAssembly="Commander"
@@ -20,6 +21,7 @@
     </UserControl.DataContext>
     <UserControl.Resources>
         <ResourceDictionary>
+            <converters:DateFormatConverter x:Key="DateFormatConverter"/>
             <MouseGesture x:Key="ClickGesture" MouseAction="LeftClick" Modifiers="Shift" />
             <Style TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment"
@@ -74,7 +76,7 @@
 
             <DataTemplate x:Key="ModificationDateTemplate"
                           DataType="viewModels:FileSystemEntityViewModel">
-                <TextBlock Text="{Binding ModificationDate}">
+                <TextBlock Text="{Binding ModificationDate, Converter={StaticResource DateFormatConverter}}">
                     <TextBlock.InputBindings>
                         <MouseBinding Gesture="{StaticResource ClickGesture}"
                                       CommandParameter="{Binding FileSystemItem}"

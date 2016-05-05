@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using Commander.Controls.FileList.Win32;
+using WPFLocalizeExtension.Engine;
 
 namespace Commander.Controls.FileList.ViewModels
 {

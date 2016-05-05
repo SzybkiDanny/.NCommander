@@ -7,6 +7,8 @@
         xmlns:viewModels="clr-namespace:Commander.ViewModels"
         xmlns:fileList="clr-namespace:Commander.Controls.FileList"
         xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        xmlns:converters="clr-namespace:Commander.Converters"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         lex:LocalizeDictionary.DesignCulture="en"
         lex:ResxLocalizationProvider.DefaultAssembly="Commander"
@@ -15,15 +17,22 @@
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <converters:CultureToBoolConverter x:Key="CultureToBoolConverter"/>
+        <system:String x:Key="pl">pl-PL</system:String>
+        <system:String x:Key="en">en-US</system:String>
+    </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="{lex:Loc language}">
                 <MenuItem Header="{lex:Loc english}"
+                          IsChecked="{Binding CurrentCulture, Converter={StaticResource CultureToBoolConverter}, ConverterParameter={StaticResource en}}"
                           Command="{Binding ChangeLanguage}"
-                          CommandParameter="en-EN"/>
+                          CommandParameter="{StaticResource en}"/>
                 <MenuItem Header="{lex:Loc polish}"
+                          IsChecked="{Binding CurrentCulture, Converter={StaticResource CultureToBoolConverter}, ConverterParameter={StaticResource pl}}"
                           Command="{Binding ChangeLanguage}"
-                          CommandParameter="pl-PL" />
+                          CommandParameter="{StaticResource pl}" />
             </MenuItem>
         </Menu>
         <Grid>
