@@ -97,10 +97,14 @@
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
             <Label Content="{lex:Loc disk}"/>
+            <Button DockPanel.Dock="Right"
+                    Content="{lex:Loc delete}"
+                    Padding="10,0,10,0"/>
             <ComboBox ItemsSource="{Binding AvailableDrives}"
                       SelectedItem="{Binding SelectedDrive}"
                       SelectedValue="{Binding SelectedDrive}"
-                      SelectedValuePath="Name" />
+                      SelectedValuePath="Name"
+                      VerticalContentAlignment="Center"/>
         </DockPanel>
         <DockPanel DockPanel.Dock="Bottom">
             <Button DockPanel.Dock="Right" Content="{lex:Loc load}"

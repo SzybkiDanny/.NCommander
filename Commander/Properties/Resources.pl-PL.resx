@@ -120,6 +120,9 @@
   <data name="attributes" xml:space="preserve">
     <value>Atrybuty</value>
   </data>
+  <data name="delete" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
   <data name="disk" xml:space="preserve">
     <value>Napęd</value>
   </data>

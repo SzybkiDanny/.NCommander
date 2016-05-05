@@ -120,6 +120,9 @@
   <data name="attributes" xml:space="preserve">
     <value>Attr</value>
   </data>
+  <data name="delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
   <data name="disk" xml:space="preserve">
     <value>Disk</value>
   </data>
