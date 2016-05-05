@@ -11,6 +11,7 @@ using System.Windows.Input;
 using GongSolutions.Wpf.DragDrop;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
+using Microsoft.VisualBasic.FileIO;
 
 namespace Commander.Controls.FileList.ViewModels
 {
@@ -165,6 +166,26 @@ namespace Commander.Controls.FileList.ViewModels
             _fileSystemWatcher.Deleted += fileSystemChangeHandler;
             _fileSystemWatcher.Renamed += (sender, args) => LoadPathFiles(path);
             _fileSystemWatcher.EnableRaisingEvents = true;
+        }
+
+        private static void CopyItems(IList<FileSystemEntityViewModel> fileSystemEntityViewModels,
+            string destinationPath)
+        {
+            foreach (var file in fileSystemEntityViewModels.OfType<FileViewModel>())
+                FileSystem.CopyFile(file.FileSystemItem.FullName, $"{destinationPath}/{file.FileSystemItem.Name}");
+            foreach (var directory in fileSystemEntityViewModels.OfType<DirectoryViewModel>())
+                FileSystem.CopyDirectory(directory.FileSystemItem.FullName,
+                    $"{destinationPath}/{directory.FileSystemItem.Name}");
+        }
+
+        private static void MoveItems(IList<FileSystemEntityViewModel> fileSystemEntityViewModels,
+            string destinationPath)
+        {
+            foreach (var file in fileSystemEntityViewModels.OfType<FileViewModel>())
+                FileSystem.MoveFile(file.FileSystemItem.FullName, $"{destinationPath}/{file.FileSystemItem.Name}");
+            foreach (var directory in fileSystemEntityViewModels.OfType<DirectoryViewModel>())
+                FileSystem.MoveDirectory(directory.FileSystemItem.FullName,
+                    $"{destinationPath}/{directory.FileSystemItem.Name}");
         }
     }
 }
