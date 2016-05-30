@@ -35,6 +35,13 @@ namespace Commander.Controls.FileList.ViewModels
             LoadPathCommand = new DelegateCommand<string>(LoadPathFiles);
             OrderCommand = new DelegateCommand<string>(OrderFiles);
             DeleteEntitiesCommand = new DelegateCommand(DeleteSelected) ;
+
+            FileSystemEventHandler fileSystemChangeHandler = delegate { LoadPathFiles(CurrentPath); };
+
+            _fileSystemWatcher.Changed += fileSystemChangeHandler;
+            _fileSystemWatcher.Created += fileSystemChangeHandler;
+            _fileSystemWatcher.Deleted += fileSystemChangeHandler;
+            _fileSystemWatcher.Renamed += (sender, args) => LoadPathFiles(CurrentPath);
         }
 
         public string CurrentPath
@@ -118,6 +125,7 @@ namespace Commander.Controls.FileList.ViewModels
         {
             if (!Directory.Exists(path))
                 return;
+
             Task.Run(() =>
             {
                 var rootDirectory = new DirectoryInfo(path);
@@ -172,15 +180,8 @@ namespace Commander.Controls.FileList.ViewModels
 
         private void SetUpFileWatcher(string path)
         {
-            FileSystemEventHandler fileSystemChangeHandler =
-                delegate { LoadPathFiles(path); };
-
             _fileSystemWatcher.EnableRaisingEvents = false;
-            _fileSystemWatcher.Path = path;
-            _fileSystemWatcher.Changed += fileSystemChangeHandler;
-            _fileSystemWatcher.Created += fileSystemChangeHandler;
-            _fileSystemWatcher.Deleted += fileSystemChangeHandler;
-            _fileSystemWatcher.Renamed += (sender, args) => LoadPathFiles(path);
+            _fileSystemWatcher.Path = CurrentPath;
             _fileSystemWatcher.EnableRaisingEvents = true;
         }
 
